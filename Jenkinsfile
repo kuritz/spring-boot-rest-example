@@ -1,0 +1,5 @@
+node ('master') {
+  doBuildSteps {}
+
+  doPushSteps {}
+}
