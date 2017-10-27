@@ -1,5 +1,5 @@
 node ('master') {
-  doBuildSteps {}
-
-  doPushSteps {}
+  ci {
+    // continuous integration
+  }
 }
