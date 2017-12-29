@@ -106,6 +106,13 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- json logging format -->
+		<dependency>
+    <groupId>net.logstash.log4j</groupId>
+    <artifactId>jsonevent-layout</artifactId>
+    <version>1.7</version>
+		</dependency>
 	</dependencies>
 
 	<build>
