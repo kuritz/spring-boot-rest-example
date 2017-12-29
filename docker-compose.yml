@@ -1,0 +1,19 @@
+version: '2.3'
+
+services:
+  splunk:
+    image: splunk/splunk
+    environment:
+      SPLUNK_USER: root
+      SPLUNK_START_ARGS: --accept-license
+    ports:
+      - 8001:8000
+      - 8089:8088
+
+  spring-boot-rest-example:
+    image: spring-boot-rest-example
+    logging:
+      driver: splunk
+      options:
+        splunk-token: SPLUNK_TOKEN
+        splunk-url: http://splunkenterprise:8088
