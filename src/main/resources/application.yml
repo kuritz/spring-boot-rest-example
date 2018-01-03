@@ -1,6 +1,6 @@
 ### This is the main way to configure the application (other than annotations).
 ### This file is in Yaml format but you can also configure spring boot using the traditional
-### Java properties file format. 
+### Java properties file format.
 
 spring.jmx:
    enabled: false
@@ -26,7 +26,7 @@ management:
 #default project info followed by actual injected pom-specified values.
 project:
   name: spring-boot-rest-example
-  version: 0.1
+  version: 0.4
   description: boot-example default description
 info:
   build:
@@ -49,9 +49,3 @@ spring.jpa:
 
 hotel.service:
   name: 'test profile:'
-  
-logging:
-  file: boot_example.log
-  org.hibernate: INFO
-
- 
