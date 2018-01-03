@@ -12,6 +12,7 @@ WORKDIR /app/
 
 RUN mvn clean package
 
-EXPOSE  8080
+EXPOSE 8090
+EXPOSE 8091 
 
 CMD ["mvn", "spring-boot:run", "-Drun.arguments='spring.profiles.active=test'"]
