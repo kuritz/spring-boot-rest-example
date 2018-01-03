@@ -4,16 +4,35 @@ services:
   splunk:
     image: splunk/splunk
     environment:
-      SPLUNK_USER: root
-      SPLUNK_START_ARGS: --accept-license
+      - SPLUNK_USER=root
+      - SPLUNK_START_ARGS=--accept-license
+      - SPLUNK_ENABLE_LISTEN=9997
     ports:
       - 8001:8000
-      - 8089:8088
+
+  splunkforwarder:
+    image: splunk/universalforwarder:6.5.3-monitor
+    hostname: splunkforwarder
+    environment:
+      - "SPLUNK_START_ARGS=--accept-license --answer-yes"
+      - SPLUNK_FORWARD_SERVER=splunk:9997
+      - SPLUNK_USER=root
+      - "SPLUNK_ADD='monitor /logs/*'"
+    restart: always
+    depends_on:
+      - splunk
+    volumes:
+      - log_volume:/logs
+      - /private/var/run/docker.sock:/var/run/docker.sock:ro
 
   spring-boot-rest-example:
-    image: spring-boot-rest-example
-    logging:
-      driver: splunk
-      options:
-        splunk-token: SPLUNK_TOKEN
-        splunk-url: http://splunkenterprise:8088
+    image: spring-boot-rest-example:0.4
+    environment:
+      - LOGGING_FILE=/logs/rest-example.log
+    ports:
+      - "8090:8090"
+      - "8091:8091"
+    volumes:
+      - log_volume:/logs
+volumes:
+  log_volume:
