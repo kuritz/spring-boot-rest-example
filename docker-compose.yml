@@ -9,30 +9,31 @@ services:
       - SPLUNK_ENABLE_LISTEN=9997
     ports:
       - 8001:8000
-
-  splunkforwarder:
-    image: splunk/universalforwarder:6.5.3-monitor
-    hostname: splunkforwarder
-    environment:
-      - "SPLUNK_START_ARGS=--accept-license --answer-yes"
-      - SPLUNK_FORWARD_SERVER=splunk:9997
-      - SPLUNK_USER=root
-      - "SPLUNK_ADD='monitor /logs/*'"
-    restart: always
-    depends_on:
-      - splunk
-    volumes:
-      - log_volume:/logs
-      - /private/var/run/docker.sock:/var/run/docker.sock:ro
+      - 8088:8088
 
   spring-boot-rest-example:
-    image: spring-boot-rest-example:0.4
+    image: spring-boot-rest-example:0.6
+    volumes:
+     - ./conf:/usr/local/apache2/conf
     environment:
-      - LOGGING_FILE=/logs/rest-example.log
+      - revision={.tag}
     ports:
       - "8090:8090"
       - "8091:8091"
-    volumes:
-      - log_volume:/logs
-volumes:
-  log_volume:
+    logging:
+      driver: splunk
+      options:
+        splunk-token: 5716c24c-9be4-47e3-8e8e-eac27494020e
+        splunk-url: "http://localhost:8088"
+        splunk-format: json
+
+  apache-app:
+    image: apache-app:0.2
+    ports:
+      - "8002:80"
+    logging:
+      driver: splunk
+      options:
+        splunk-token: 5716c24c-9be4-47e3-8e8e-eac27494020e
+        splunk-url: "http://localhost:8088"
+        splunk-format: json
